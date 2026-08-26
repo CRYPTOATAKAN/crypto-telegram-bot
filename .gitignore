@@ -1,0 +1,25 @@
+# Ortam değişkenleri ve gizli anahtarlar
+.env
+.env.local
+.env.*.local
+
+# Python önbellek ve sanal ortamlar
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+ENV/
+
+# Loglar ve veritabanı
+*.log
+*.sqlite
+*.sqlite3
+*.db
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

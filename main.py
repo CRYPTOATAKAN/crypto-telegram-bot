@@ -802,6 +802,49 @@ async def background_scan_job(context: ContextTypes.DEFAULT_TYPE):
         logger.error(f"Arka plan tarama hatası: {e}")
 
 
+async def run_health_check_server(port: int = 8080):
+    """
+    Northflank HTTP Health Check kontrolü için hafif arka plan sunucusu.
+    Northflank'in '1 crashing / Configure health checks' hatası vermesini engeller.
+    """
+    async def handle_client(reader, writer):
+        try:
+            await reader.read(512)
+            response = (
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: text/plain; charset=utf-8\r\n"
+                "Content-Length: 15\r\n"
+                "Connection: close\r\n\r\n"
+                "Bot is running!"
+            )
+            writer.write(response.encode('utf-8'))
+            await writer.drain()
+            writer.close()
+            await writer.wait_closed()
+        except Exception:
+            pass
+
+    try:
+        server = await asyncio.start_server(handle_client, '0.0.0.0', port)
+        logger.info(f"Sağlık kontrolü (Health Check) HTTP sunucusu {port} portunda devrede.")
+        async with server:
+            await server.serve_forever()
+    except Exception as e:
+        logger.warning(f"Health check sunucusu başlatılamadı ({port} portu meşgul olabilir): {e}")
+
+
+async def post_init(application) -> None:
+    """Bot başladıktan sonra arka planda HTTP sağlık kontrolü sunucusunu ayağa kaldırır."""
+    import os
+    port = int(os.getenv("PORT", "8080"))
+    asyncio.create_task(run_health_check_server(port))
+
+
+async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Telegram botunda oluşan beklenmedik hataları yakalar ve loglar (botun çökmesini önler)."""
+    logger.error(f"Telegram güncellemesi işlenirken hata oluştu: {context.error}", exc_info=context.error)
+
+
 def main():
     """Bot uygulamasını başlatır."""
     if not config.TELEGRAM_BOT_TOKEN:
@@ -811,7 +854,15 @@ def main():
 
     logger.info("Kripto Asistan Telegram Botu başlatılıyor...")
 
-    application = ApplicationBuilder().token(config.TELEGRAM_BOT_TOKEN).build()
+    application = (
+        ApplicationBuilder()
+        .token(config.TELEGRAM_BOT_TOKEN)
+        .post_init(post_init)
+        .build()
+    )
+
+    # Hata Yakalayıcı (Botun çökmesini engeller)
+    application.add_error_handler(error_handler)
 
     # Temel Komutlar
     application.add_handler(CommandHandler("start", start_command))

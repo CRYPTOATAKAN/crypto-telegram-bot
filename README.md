@@ -8,9 +8,15 @@ Doğrudan **GitHub** ve **Northflank** üzerinde 7/24 kesintisiz (Worker) çalı
 
 ## 🚀 Özellikler
 
-- **📊 Anlık Piyasa Raporu (`/rapor`):** BTC, ETH, SOL ve takip listesindeki coinlerin anlık fiyatları, 24 saatlik değişimleri ve Korku & Açgözlülük Endeksi.
-- **🔍 4 Saatlik Teknik Tarama (`/tara`):** Takip listesindeki coinlerin RSI(14), EMA50/200 trend durumları ve MACD kesişimleri.
-- **🔔 7/24 Otomatik Sinyal Bildirimi:** RSI aşırı satım (<30) veya aşırı alım (>70) bölgelerine ulaştığında Telegram'a otomatik bildirim iletir.
+- **📊 Anlık Piyasa Raporu (`/rapor`):** BTC, ETH, SOL, BNB liderleri, Korku & Açgözlülük Endeksi ve günün en çok kazanan/kaybeden tokenleri.
+- **🌐 40+ Likit Token & Dinamik Hacim Taraması:** Piyasanın en likit 40+ tokeni ve Binance'in en yüksek 24s işlem hacmine sahip çiftleri otomatik taranır.
+- **⚡ Ani Hareket Öncesi Erken Uyarılar (Pre-Pump & Pre-Dump):**
+  - **Uyuşmazlık Tespiti (RSI Divergence):** Fiyat zirve/dip tazelerken RSI'ın ayrışmasıyla ani çakılış ve sıçramaları hareket başlamadan önceden haber verir.
+  - **Anormal Hacim Patlaması:** Ortalamanın 2.5 katı hacim girdiğinde ("Volume precedes price") hareket öncesi uyarır.
+  - **Bollinger Sıkışması (Volatility Squeeze):** Volatilitenin aşırı daraldığı ve sert patlamanın yaklaştığı anları yakalar.
+- **🛡️ Akıllı Spam Önleme & Soğuma (Deduplication / AlertManager):** Aynı token aynı bölgede kaldığı sürece her taramada tekrar bildirim gönderilmez. Sadece yeni durum oluştuğunda veya belirlenen soğuma süresi (örn. 6 saat) dolduğunda haber verir.
+- **🔍 4 Saatlik Teknik Tarama (`/tara`):** 40+ tokeni 1-2 saniye içinde paralel tarar, kritik sinyal ve erken uyarı verenleri listeler.
+- **🔔 Aktif Takip ve Alarmlar (`/alarmlar`):** Takipte olan aktif sinyalleri ve kalan soğuma sürelerini gösterir.
 - **🎯 Risk & Pozisyon Hesaplayıcı (`/risk`):** 11.000 USDT sermayenize ve belirlediğiniz stop mesafesine göre kaç dolarlık ve kaç adet coin almanız gerektiğini hesaplar; sermayenizi korur.
 - **🏦 DeFi Yüksek Getiri Havuzları (`/defi`):** DeFiLlama üzerinden \$2M+ TVL'e sahip en yüksek APY veren güvenilir stablecoin havuzlarını listeler.
 - **🔒 Kişisel Güvenlik Filtresi:** Bot yalnızca yapılandırılan `ALLOWED_TELEGRAM_USER_ID` sahibine yanıt verir.
@@ -33,17 +39,9 @@ Doğrudan **GitHub** ve **Northflank** üzerinde 7/24 kesintisiz (Worker) çalı
 Terminalinizde proje dizinine gidin ve GitHub reponuza yükleyin:
 
 ```bash
-cd /Users/macbook/.gemini/antigravity/scratch/crypto-telegram-bot
-
-# Git başlatın
-git init
 git add .
-git commit -m "feat: Kripto Telegram Asistan Botu ilk surum"
-
-# GitHub reponuzu bağlayın ve gönderin
-git branch -M main
-git remote add origin https://github.com/KULLANICI_ADINIZ/REPO_ADINIZ.git
-git push -u origin main
+git commit -m "feat: Genisletilmis 40+ token, erken uyari ve akilli alarm sogutma sistemi"
+git push origin main
 ```
 
 ---
@@ -63,9 +61,13 @@ git push -u origin main
    `Environment` sekmesinden şu anahtarları ekleyin:
    - `TELEGRAM_BOT_TOKEN`: `@BotFather`'dan aldığınız token.
    - `ALLOWED_TELEGRAM_USER_ID`: Sizin sayısal Telegram kullanıcı ID'niz (Örn: `123456789`).
+   - `DYNAMIC_TOP_TOKENS`: `true`
+   - `TOP_TOKENS_LIMIT`: `40`
+   - `SCAN_INTERVAL_MINUTES`: `15`
+   - `ALERT_COOLDOWN_HOURS`: `6.0`
+   - `EARLY_WARNING_ENABLED`: `true`
    - `PORTFOLIO_CAPITAL_USDT`: `11000`
    - `DEFAULT_RISK_PERCENT`: `1.5`
-   - `SCAN_INTERVAL_MINUTES`: `30`
 7. **Create Service** butonuna basarak dağıtımı başlatın.
 
 > 🎉 **Tebrikler!** Northflank, projenizi derleyip 7/24 arka planda çalıştıracaktır. GitHub'a her yeni commit attığınızda Northflank botunuzu otomatik günceller.
@@ -97,7 +99,8 @@ python main.py
 | Komut | Açıklama |
 | :--- | :--- |
 | `/start` veya `/menu` | İnteraktif butonlu ana menüyü açar. |
-| `/rapor` | BTC/ETH/SOL fiyatları ve Korku/Açgözlülük endeksini getirir. |
-| `/tara` | 4 saatlik grafiklerde RSI, MACD ve Trend durumunu listeler. |
+| `/rapor` | BTC/ETH/SOL/BNB liderleri, Korku/Açgözlülük ve günün en çok kazandıran/kaybettirenleri. |
+| `/tara` | 40+ token için RSI, MACD, Trend ve Erken Uyarı modellerini (Uyuşmazlık, Sıkışma, Hacim) listeler. |
+| `/alarmlar` | Şu anda takipte olan sinyalleri ve kalan soğuma sürelerini (spam koruması) listeler. |
 | `/risk 64000 62500 68000` | Giriş: 64.000, Stop: 62.500, Hedef: 68.000 için ideal pozisyon büyüklüğünü hesaplar. |
 | `/defi` | \$2M+ TVL'e sahip en yüksek getirili stablecoin havuzlarını listeler. |

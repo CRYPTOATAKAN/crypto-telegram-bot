@@ -94,13 +94,25 @@ python main.py
 
 ---
 
-## 📱 Bot Komut Rehberi
+## 📱 Detaylı Bot Komut Rehberi
 
-| Komut | Açıklama |
-| :--- | :--- |
-| `/start` veya `/menu` | İnteraktif butonlu ana menüyü açar. |
-| `/rapor` | BTC/ETH/SOL/BNB liderleri, Korku/Açgözlülük ve günün en çok kazandıran/kaybettirenleri. |
-| `/tara` | 40+ token için RSI, MACD, Trend ve Erken Uyarı modellerini (Uyuşmazlık, Sıkışma, Hacim) listeler. |
-| `/alarmlar` | Şu anda takipte olan sinyalleri ve kalan soğuma sürelerini (spam koruması) listeler. |
-| `/risk 64000 62500 68000` | Giriş: 64.000, Stop: 62.500, Hedef: 68.000 için ideal pozisyon büyüklüğünü hesaplar. |
-| `/defi` | \$2M+ TVL'e sahip en yüksek getirili stablecoin havuzlarını listeler. |
+| Kategori | Komut | Açıklama & Örnek Kullanım |
+| :--- | :--- | :--- |
+| **Ana Menü** | `/start` veya `/menu` | İnteraktif butonlu ana kontrol panelini açar. |
+| **Rehber** | `/komutlar` veya `/yardim` | Tüm komutların detaylı açıklamalarını ve örneklerini gösterir. |
+| **Piyasa** | `/rapor` | BTC, ETH, SOL, BNB liderleri, Korku/Açgözlülük endeksi ve en çok kazanan/kaybedenler. |
+| **Tarama** | `/tara` | 40+ token için RSI, MACD, Trend, Sıkışma, Uyuşmazlık ve Vadeli Fonlama taraması. |
+| **Teknik Alarm**| `/alarmlar` | Sistemde aktif olan indikatör sinyallerini ve kalan soğuma sürelerini listeler. |
+| **Özel Takip** | `/ekle [COIN]` | Kişisel listenize coin ekler (Örn: `/ekle TIA` veya `/ekle SUI`). |
+| **Özel Takip** | `/sil [COIN]` | Kişisel listenizden coin çıkarır (Örn: `/sil PEPE`). |
+| **Özel Takip** | `/listem` | Sizin tarafınızdan eklenen özel takip listesini görüntüler. |
+| **Fiyat Alarmı**| `/alarm [COIN] [FİYAT]` | Özel fiyat hedefi alarmı kurar (Örn: `/alarm BTC 65000` veya `/alarm SOL 135.5`). |
+| **Fiyat Alarmı**| `/fiyat_alarmlari` | Bekleyen aktif fiyat hedeflerinizi listeler. |
+| **Fiyat Alarmı**| `/alarm_sil [ID]` | İptal etmek istediğiniz fiyat alarmını siler (Örn: `/alarm_sil 1`). |
+| **Risk Hesabı** | `/risk [Giriş] [Stop] [Hedef]` | 11.000 USDT sermayeye ve %1.5 riske göre pozisyon büyüklüğü hesaplar. |
+| **Trade Kaydı** | `/islem_ac [COIN] [YÖN] [Giriş] [Stop] [Hedef]` | Açtığınız pozisyonu veritabanına kaydeder ve 7/24 Stop/TP takibine alır. |
+| **Portföy** | `/pozisyonlar` | Açık işlemlerinizi, anlık fiyatları, canlı Kâr/Zarar ($ ve %) durumunu listeler. |
+| **Pozisyon Kapat**| `/kapat [ID] [Çıkış_Fiyatı]` | Açık pozisyonu kapatır ve net kâr/zararı realize eder (Örn: `/kapat 1 67500`). |
+| **İşlem Geçmişi**| `/gecmis` | Kapatılmış geçmiş işlemlerinizi ve realize edilen toplam kâr/zararı döner. |
+| **DeFi** | `/defi` | \$2M+ TVL'e sahip en yüksek APY veren güvenilir stablecoin havuzlarını listeler. |
+
